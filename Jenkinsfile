@@ -1,7 +1,7 @@
 pipeline {
   agent {
       docker {
-        image 'docker:20.10.24-dind'
+        image 'docker:24.0.2-cli'
         args '-v /var/run/docker.sock:/var/run/docker.sock'
       }
     }
@@ -53,19 +53,20 @@ pipeline {
 
     stage('Construire l’image Docker') {
       steps {
-          sh "docker build -t ${DOCKER_IMAGE}:${IMAGE_TAG} ."
+        script {
+        docker.build("${DOCKER_IMAGE}:${IMAGE_TAG}")
         }
+      }
     }
 
     stage('Pousser l’image sur Docker Hub') {
-       steps {
-          withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-            sh """
-              echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-              docker push ${DOCKER_IMAGE}:${IMAGE_TAG}
-            """
+      steps {
+        script {
+          docker.withRegistry('https://index.docker.io/v1/', DOCKER_CREDENTIALS_ID) {
+          docker.image("${DOCKER_IMAGE}:${IMAGE_TAG}").push()
           }
         }
+      }
     }
   }
 
