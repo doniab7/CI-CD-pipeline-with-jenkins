@@ -1,9 +1,13 @@
 pipeline {
-  agent any
+  agent {
+      docker {
+          image 'docker'  // Utilise l'image Docker avec Docker in Docker
+          args '-v /var/run/docker.sock:/var/run/docker.sock'  // Pour accéder au socket Docker du serveur hôte
+      }
+  }
 
   tools {
     maven 'Maven 3.8.6'
-    docker 'docker'
   }
 
   environment {
