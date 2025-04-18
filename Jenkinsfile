@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools {
+    maven 'Maven 3.8.6'
+  }
+
   environment {
     DOCKER_CREDENTIALS_ID = 'docker-hub'
     DOCKER_IMAGE = 'doniab7/springboot-with-docker'
