@@ -1,13 +1,9 @@
 pipeline {
-  agent {
-      docker {
-        image 'docker:24.0.2-cli'
-        args '-v /var/run/docker.sock:/var/run/docker.sock'
-      }
-    }
+  agent any
 
   tools {
     maven 'Maven 3.8.6'
+    docker 'docker'
   }
 
   environment {
