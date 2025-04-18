@@ -12,7 +12,7 @@ pipeline {
   }
 
   triggers {
-    pollSCM('* * * * *') // Vérifie toutes les minutes (à adapter)
+    githubPush()
   }
 
   options {
